@@ -57,7 +57,7 @@ public class Categoria {
         existe = false;
     }
 
-    public Categoria(int cod_categoria, String nombre_categoria, String descripcion, boolean existe) {
+    public Categoria(int cod_categoria, String nombre_categoria, String descripcion) {
         this.cod_categoria = cod_categoria;
         this.nombre_categoria = nombre_categoria;
         this.descripcion = descripcion;
