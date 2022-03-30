@@ -53,7 +53,7 @@ public class ClasPlanta {
     public ClasPlanta() {
     }
 
-    public ClasPlanta(int cod_clasificacion, int cod_planta, int cod_categoria, boolean existe) {
+    public ClasPlanta(int cod_clasificacion, int cod_planta, int cod_categoria) {
         this.cod_clasificacion = cod_clasificacion;
         this.cod_planta = cod_planta;
         this.cod_categoria = cod_categoria;
