@@ -10,7 +10,7 @@ GO
 -- =============================================
 CREATE OR ALTER TRIGGER PERMITIR_CANTIDADES
    ON  Detalle_Factura
-   INSTEAD OF INSERT
+   INSTEAD OF INSERT, UPDATE
 AS 
 BEGIN TRY 	
 BEGIN TRANSACTION
@@ -84,74 +84,74 @@ GO
 -- esta disponible en sus respectivas tablas, si es así continua con el proceso.
 --**** Se hicieron 2 triggers iguales para no hacer muchos procesos y saber si actualiza o no
 -- =============================================
-CREATE OR ALTER TRIGGER PERMITIR_CANTIDADES
-   ON  Detalle_Factura
-   INSTEAD OF UPDATE
-AS 
-BEGIN TRY 	
-BEGIN TRANSACTION
+--CREATE OR ALTER TRIGGER PERMITIR_CANTIDADES
+--   ON  Detalle_Factura
+--   INSTEAD OF UPDATE
+--AS 
+--BEGIN TRY 	
+--BEGIN TRANSACTION
 
---Si hay herramientas o productos ingresados en la factura
-IF ((SELECT CANTIDAD_HERRAMIENTAS_PROD FROM inserted) > 0)
+----Si hay herramientas o productos ingresados en la factura
+--IF ((SELECT CANTIDAD_HERRAMIENTAS_PROD FROM inserted) > 0)
 
---Pregunta si hay suficientes en el inventario de las herramientas o productos
-	IF ((SELECT CANTIDAD_HERRAMIENTAS_PROD FROM inserted) <= (SELECT CANTIDAD_DISPONIBLE FROM inserted INNER JOIN  Herramienta_Producto HP ON HP.COD_HERRAMIENTA_PROD = inserted.COD_HERRAMIENTA_PROD
-																WHERE inserted.COD_HERRAMIENTA_PROD = HP.COD_HERRAMIENTA_PROD))			
-			BEGIN
-			BEGIN TRANSACTION
-				INSERT INTO Detalle_Factura
-				SELECT COD_FACTURA, COD_HERRAMIENTA_PROD,CANTIDAD_HERRAMIENTAS_PROD, COD_PLANTA, CANTIDAD_PLANTAS,TOTAL_PAGAR, FECHA, OBSERVACIONES FROM inserted
+----Pregunta si hay suficientes en el inventario de las herramientas o productos
+--	IF ((SELECT CANTIDAD_HERRAMIENTAS_PROD FROM inserted) <= (SELECT CANTIDAD_DISPONIBLE FROM inserted INNER JOIN  Herramienta_Producto HP ON HP.COD_HERRAMIENTA_PROD = inserted.COD_HERRAMIENTA_PROD
+--																WHERE inserted.COD_HERRAMIENTA_PROD = HP.COD_HERRAMIENTA_PROD))			
+--			BEGIN
+--			BEGIN TRANSACTION
+--				INSERT INTO Detalle_Factura
+--				SELECT COD_FACTURA, COD_HERRAMIENTA_PROD,CANTIDAD_HERRAMIENTAS_PROD, COD_PLANTA, CANTIDAD_PLANTAS,TOTAL_PAGAR, FECHA, OBSERVACIONES FROM inserted
 
-				--Se llama al SP para actualizar la tabla y se declaran y se enván los parámetros
-				DECLARE @parametro1 int
-				SET @parametro1  =  (SELECT COD_HERRAMIENTA_PROD FROM inserted)
-				DECLARE @parametro2 int
-				SET @parametro2 =(SELECT CANTIDAD_HERRAMIENTAS_PROD FROM inserted)
-				EXEC SP_RESTAR_CANTIDAD_HerrProd @parametro1,@parametro2
-			COMMIT TRANSACTION
-			END
-	ELSE	
-	BEGIN
-		RAISERROR('MENSAJE: No hay articulos suficientes',16,1)
-		ROLLBACK TRANSACTION 
-		PRINT ERROR_MESSAGE();
-	END
---Si hay plantas ingresadas en la factura
-COMMIT TRANSACTION
+--				--Se llama al SP para actualizar la tabla y se declaran y se enván los parámetros
+--				DECLARE @parametro1 int
+--				SET @parametro1  =  (SELECT COD_HERRAMIENTA_PROD FROM inserted)
+--				DECLARE @parametro2 int
+--				SET @parametro2 =(SELECT CANTIDAD_HERRAMIENTAS_PROD FROM inserted)
+--				EXEC SP_RESTAR_CANTIDAD_HerrProd @parametro1,@parametro2
+--			COMMIT TRANSACTION
+--			END
+--	ELSE	
+--	BEGIN
+--		RAISERROR('MENSAJE: No hay articulos suficientes',16,1)
+--		ROLLBACK TRANSACTION 
+--		PRINT ERROR_MESSAGE();
+--	END
+----Si hay plantas ingresadas en la factura
+--COMMIT TRANSACTION
 
-IF ((SELECT CANTIDAD_PLANTAS FROM inserted) > 0)
-	IF ((SELECT CANTIDAD_PLANTAS FROM inserted) <= (SELECT CANTIDAD_DISPONIBLE FROM inserted INNER JOIN Planta P ON P.COD_PLANTA= inserted.COD_PLANTA
-																WHERE inserted.COD_PLANTA= P.COD_PLANTA))
-			--Se inserta todo si hay disponibles			
-			BEGIN			
-			BEGIN TRANSACTION
-				--INSERT INTO Detalle_Factura
-				--SELECT inserted.COD_PLANTA FROM inserted INNER JOIN Detalle_Factura DF ON inserted.COD_DETALLE = DF.COD_DETALLE
-				--WHERE DF.COD_DETALLE = inserted.COD_DETALLE		
-				UPDATE Detalle_Factura
-				SET CANTIDAD_PLANTAS= (SELECT CANTIDAD_PLANTAS FROM inserted )
-				WHERE COD_DETALLE =(select COD_DETALLE from inserted)
+--IF ((SELECT CANTIDAD_PLANTAS FROM inserted) > 0)
+--	IF ((SELECT CANTIDAD_PLANTAS FROM inserted) <= (SELECT CANTIDAD_DISPONIBLE FROM inserted INNER JOIN Planta P ON P.COD_PLANTA= inserted.COD_PLANTA
+--																WHERE inserted.COD_PLANTA= P.COD_PLANTA))
+--			--Se inserta todo si hay disponibles			
+--			BEGIN			
+--			BEGIN TRANSACTION
+--				--INSERT INTO Detalle_Factura
+--				--SELECT inserted.COD_PLANTA FROM inserted INNER JOIN Detalle_Factura DF ON inserted.COD_DETALLE = DF.COD_DETALLE
+--				--WHERE DF.COD_DETALLE = inserted.COD_DETALLE		
+--				UPDATE Detalle_Factura
+--				SET CANTIDAD_PLANTAS= (SELECT CANTIDAD_PLANTAS FROM inserted )
+--				WHERE COD_DETALLE =(select COD_DETALLE from inserted)
 				
-				--Se llama al SP para actualizar la tabla y se declaran y se enván los parámetros
-				DECLARE @parametro3 int
-				SET @parametro3  =  (SELECT COD_PLANTA FROM inserted)
-				DECLARE @parametro4 int
-				SET @parametro4 =(SELECT CANTIDAD_PLANTAS FROM inserted)
-				EXEC SP_RESTAR_CANTIDAD_PLANTA @parametro3,@parametro4
-			COMMIT TRANSACTION
-			END
-	ELSE
-	BEGIN
-		RAISERROR('MENSAJE: No hay plantas suficientes',16,1)		
-		ROLLBACK TRANSACTION 
-		PRINT ERROR_MESSAGE();
-	END
-END TRY
-	BEGIN CATCH 	
-	print 'test'
-		PRINT ERROR_MESSAGE();
-	END CATCH
-GO
+--				--Se llama al SP para actualizar la tabla y se declaran y se enván los parámetros
+--				DECLARE @parametro3 int
+--				SET @parametro3  =  (SELECT COD_PLANTA FROM inserted)
+--				DECLARE @parametro4 int
+--				SET @parametro4 =(SELECT CANTIDAD_PLANTAS FROM inserted)
+--				EXEC SP_RESTAR_CANTIDAD_PLANTA @parametro3,@parametro4
+--			COMMIT TRANSACTION
+--			END
+--	ELSE
+--	BEGIN
+--		RAISERROR('MENSAJE: No hay plantas suficientes',16,1)		
+--		ROLLBACK TRANSACTION 
+--		PRINT ERROR_MESSAGE();
+--	END
+--END TRY
+--	BEGIN CATCH 	
+--	print 'test'
+--		PRINT ERROR_MESSAGE();
+--	END CATCH
+--GO
 
 
 --=========================================

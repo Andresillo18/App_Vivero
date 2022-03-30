@@ -13,6 +13,7 @@ public class Herramienta_Producto extends Inventario {
     private int cod_herramienta_prod;
     private String material;
     private Date fechaVencimiento;
+    private boolean existe;
 // </editor-fold>
 
 // <editor-fold desc="PROPIEDADES" defaultstate="collapsed">    
@@ -40,32 +41,36 @@ public class Herramienta_Producto extends Inventario {
         this.fechaVencimiento = fechaVencimiento;
     }
 
+    public boolean isExiste() {
+        return existe;
+    }
+
+    public void setExiste(boolean existe) {
+        this.existe = existe;
+    }
+
 // </editor-fold>
     
 // <editor-fold desc="CONSTRUCTORES" defaultstate="collapsed">    
-
-    //Vacíos
+    //Vacío
     public Herramienta_Producto() {
     }
 
-    public Herramienta_Producto(String nombre, String descripcion, float precio, int cantidad_disponible) {
-        super(nombre, descripcion, precio, cantidad_disponible);
-    }
-
-    // Con parámetros
-    public Herramienta_Producto(int cod_herramienta_prod, String material, Date fechaVencimiento) {
+    public Herramienta_Producto(int cod_herramienta_prod, String material, Date fechaVencimiento, boolean existe) {
         this.cod_herramienta_prod = cod_herramienta_prod;
         this.material = material;
         this.fechaVencimiento = fechaVencimiento;
+        this.existe = existe;
     }
 
-    public Herramienta_Producto(int cod_herramienta_prod, String material, Date fechaVencimiento, String nombre, String descripcion, float precio, int cantidad_disponible) {
+    public Herramienta_Producto(int cod_herramienta_prod, String material, Date fechaVencimiento, boolean existe, String nombre, String descripcion, float precio, int cantidad_disponible) {
         super(nombre, descripcion, precio, cantidad_disponible);
         this.cod_herramienta_prod = cod_herramienta_prod;
         this.material = material;
         this.fechaVencimiento = fechaVencimiento;
-    }        
-    
+        this.existe = existe;
+    }
+
 // </editor-fold>   
     
 // <editor-fold desc="Métodos" defaultstate="collapsed">
