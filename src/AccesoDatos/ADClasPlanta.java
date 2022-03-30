@@ -1,6 +1,7 @@
 package AccesoDatos;
 
 import Entidades.Categoria;
+import Entidades.ClasPlanta;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,11 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 29-3-22
+ * 30-3-22
  *
  * @author Andrés Villalobos
  */
-public class ADCategoria {
+public class ADClasPlanta {
 
     //VARIABLE GLOBAL
     private Connection _conexion; // Para conectarse a la BD
@@ -27,8 +28,7 @@ public class ADCategoria {
         return _mensaje;
     }
 
-    //CONSTRUCTOR    
-    public ADCategoria() throws Exception { //Se capacita para enviar excepciones
+    public ADClasPlanta() throws Exception {
         try {
             String url = Config.config.getConectionString(); // Se obtiene la cadena de conexión
 
@@ -40,32 +40,35 @@ public class ADCategoria {
     }
 
 // <editor-fold desc="MÉTODOS" defaultstate="collapsed">    
+    
     // Método1
-    public int Insertar(Categoria categoria) throws Exception {
-        int id_categoria = -1; // el -1 significa que no existe, por ahora
-        String sentencia = "INSERT INTO Categoria (NOMBRE_CATEGORIA,DESCRIPCION) VALUES (?,?)";
+    public int Insertar(ClasPlanta clasPlanta1) throws Exception {
+        int cod_clasificacion = -1; // el -1 significa que no existe, por ahora
+        String sentencia = "INSERT INTO Clasificacion_Planta (COD_CLASIFICACION,COD_PLANTA, COD_CATEGORIA) VALUES (?,?, ?)";
 
         try {
             PreparedStatement PS = _conexion.prepareStatement(sentencia, PreparedStatement.RETURN_GENERATED_KEYS); // Envía la sentencia según la entidad y regresa las llaves auto generadas
 
             //Se registra los argumentos de la consulta
-            PS.setString(1, categoria.getNombre_categoria());
-            PS.setString(2, categoria.getDescripcion());
+            PS.setInt(1, clasPlanta1.getCod_clasificacion());
+            PS.setInt(2, clasPlanta1.getCod_planta());
+            PS.setInt(3, clasPlanta1.getCod_categoria());
+            
 
             PS.execute(); // Se ejecuta la sentencia- retorna true o false 
 
             ResultSet rs = PS.getGeneratedKeys(); // El ResultSet es de una celda porque obtiene los identity de un INSERT
 
             if (rs != null && rs.next()) {
-                id_categoria = rs.getInt(1); //busca el unico registro de la unica columna
-                _mensaje = "Categoría ingresado satisfactoriamente";
+                cod_clasificacion = rs.getInt(1); //busca el unico registro de la unica columna
+                _mensaje = "Clasificación ingresado satisfactoriamente";
             }
 
         } catch (Exception e) {
         } finally {
             _conexion.close(); // Siempre debe cerrar conexiones
         }
-        return id_categoria;
+        return cod_clasificacion;
     }
 
     //Método2
@@ -74,7 +77,7 @@ public class ADCategoria {
         String sentencia = "UPDATE Categoria SET NOMBRE_CATEGORIA = ?, DESCRIPCION =? WHERE COD_CATEGORIA = ? ";
 
         try {
-            PreparedStatement ps = _conexion.prepareStatement(sentencia); 
+            PreparedStatement ps = _conexion.prepareStatement(sentencia);
 
             ps.setString(1, categoria.getNombre_categoria());
             ps.setString(2, categoria.getDescripcion());
@@ -153,7 +156,7 @@ public class ADCategoria {
 
         try {
             Statement Stm = _conexion.createStatement(); // Siempre se debe estable esta conexión con la BD
-            
+
             String sentencia = "SELECT COD_CATEGORIA, NOMBRE_CATEGORIA, DESCRIPCION FROM Categoria";
 
             if (!condicion.equals("")) { // Si se envío una condición
@@ -176,36 +179,35 @@ public class ADCategoria {
     }
 
     //Método6
-    public Categoria ObtenerRegistro(String condicion) throws Exception{
+    public Categoria ObtenerRegistro(String condicion) throws Exception {
         Categoria categoria1 = new Categoria(); // este es el objeto que devolverá 
-        ResultSet rs= null;
-        
+        ResultSet rs = null;
+
         try {
             String sentencia = "SELECT COD_CATEGORIA, NOMBRE_CATEGORIA, DESCRIPCION FROM Categoria";
             Statement Stm = _conexion.createStatement(); // Se usa create ya que no envía parametros a la sentencia
-            
+
             if (!condicion.equals("")) {
-                 sentencia = String.format("%s WHERE %s", sentencia, condicion); // Interpolación de Strings 
+                sentencia = String.format("%s WHERE %s", sentencia, condicion); // Interpolación de Strings 
             }
-            
+
             rs = Stm.executeQuery(sentencia);
-            
+
             // Lo que devuelve la columna se establece a los atributos de su entidad (se usan las propiedades de encapsulamiento)
             if (rs.next()) { // Solo devolverá un registro
                 categoria1.setCod_categoria(rs.getInt(1));
                 categoria1.setNombre_categoria(rs.getString(2));
-                categoria1.setDescripcion(rs.getString(3));                
+                categoria1.setDescripcion(rs.getString(3));
                 categoria1.setExiste(true);
             }
         } catch (Exception e) {
             throw e;
-        }
-        finally{
+        } finally {
             _conexion.close();
         }
-        
+
         return categoria1;
     }
 // </editor-fold>
-    
+
 }
