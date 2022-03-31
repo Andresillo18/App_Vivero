@@ -1,23 +1,22 @@
 package AccesoDatos;
 
-import Entidades.Empleado;
-import java.sql.CallableStatement;
+import Entidades.Factura;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *31-3-22
+ * 31-3-22
+ *
  * @author Andrés Villalobos
  */
-public class ADEmpleado {
-
+public class ADFactura {
     //VARIABLE GLOBAL
+
     private Connection _conexion; // Para conectarse a la BD
 
     //ATRIBUTOS
@@ -28,7 +27,7 @@ public class ADEmpleado {
         return _mensaje;
     }
 
-    public ADEmpleado() throws Exception {
+    public ADFactura() throws Exception {
         try {
             String url = Config.config.getConectionString(); // Se obtiene la cadena de conexión
 
@@ -41,58 +40,48 @@ public class ADEmpleado {
 
     // <editor-fold desc="MÉTODOS" defaultstate="collapsed">    
     // Método1
-    public int Insertar(Empleado empleado1) throws Exception {
-        int cod_empleado = -1; // el -1 significa que no existe, por ahora
-        String sentencia = "INSERT INTO Empleado (ID, NOMBRE,APELLIDO1, TELEFONO, VENTAS_REALIZADAS, ESTADO, BONO) VALUES (?,?,?,?,?,?,?)";
+    public int Insertar(Factura fact) throws Exception {
+        int cod_factura = -1; // el -1 significa que no existe, por ahora
+        String sentencia = "INSERT INTO Factura (COD_EMPLEADO, COD_CLIENTE) VALUES (?,?)";
 
         try {
             PreparedStatement PS = _conexion.prepareStatement(sentencia, PreparedStatement.RETURN_GENERATED_KEYS); // Envía la sentencia según la entidad y regresa las llaves auto generadas
 
             //Se registra los argumentos de la consulta            
-            PS.setInt(1, empleado1.getId());
-            PS.setString(2, empleado1.getNombre());
-            PS.setString(3, empleado1.getApellido1());
-            PS.setString(4, empleado1.getTelefono());
-            PS.setInt(5, empleado1.getVentas_realizadas());
-            PS.setBoolean(6, empleado1.isEstado());
-            PS.setFloat(7, empleado1.getBono());
+            PS.setInt(1, fact.getCod_empleado());
+            PS.setInt(2, fact.getCod_cliente());
 
             PS.execute(); // Se ejecuta la sentencia- retorna true o false 
 
             ResultSet rs = PS.getGeneratedKeys(); // El ResultSet es de una celda porque obtiene los identity de un INSERT
 
             if (rs != null && rs.next()) {
-                cod_empleado = rs.getInt(1); //busca el unico registro de la unica columna
-                _mensaje = "Empleado ingresado satisfactoriamente";
+                cod_factura = rs.getInt(1); //busca el unico registro de la unica columna
+                _mensaje = "Factura ingresado satisfactoriamente";
             }
 
         } catch (Exception e) {
         } finally {
             _conexion.close(); // Siempre debe cerrar conexiones
         }
-        return cod_empleado;
+        return cod_factura;
     }
 
     //Método2
-    public int Modificar(Empleado empleado1) throws Exception {
+    public int Modificar(Factura fact) throws Exception {
         int result = 0; // No ha obtenido ningún resultado        
-        String sentencia = "UPDATE Empleado SET ID = ?, NOMBRE =?, APELLIDO1 =?, TELEFONO=?, VENTAS_REALIZADAS =?, ESTADO =?,BONO=? WHERE COD_EMPLEADO = ? ";
+        String sentencia = "UPDATE Factura SET COD_EMPLEADO = ?, COD_CLIENTE =? WHERE COD_FACTURA = ? ";
 
         try {
             PreparedStatement ps = _conexion.prepareStatement(sentencia);
 
-            ps.setInt(1, empleado1.getId());
-            ps.setString(2, empleado1.getNombre());
-            ps.setString(3, empleado1.getApellido1());
-            ps.setString(4, empleado1.getTelefono());
-            ps.setInt(5, empleado1.getVentas_realizadas());
-            ps.setBoolean(6, empleado1.isEstado());
-            ps.setFloat(7, empleado1.getBono());
-            ps.setInt(8, empleado1.getCod_empleado());
+            ps.setInt(1, fact.getCod_empleado());
+            ps.setInt(2, fact.getCod_cliente());
+            ps.setInt(3, fact.getCod_factura());
 
             result = ps.executeUpdate();
 
-            if (result > 0) { // devuelve las fulas afectadas y si hubo mas de una avisa
+            if (result > 0) { // devuelve las filas afectadas y si hubo mas de una avisa
                 _mensaje = "Registro modificado!";
             }
         } catch (Exception e) {
@@ -105,14 +94,14 @@ public class ADEmpleado {
     }
 
     //Método3
-    public int Eliminar(Empleado empleado1) throws Exception {
+    public int Eliminar(Factura fact) throws Exception {
         int result = 0;
-        String sentencia = "DELETE Empleado WHERE COD_EMPLEADO = ?";
+        String sentencia = "DELETE Factura WHERE COD_FACTURA = ?";
 
         try {
             PreparedStatement ps = _conexion.prepareStatement(sentencia);
 
-            ps.setInt(1, empleado1.getCod_empleado());
+            ps.setInt(1, fact.getCod_factura());
 
             result = ps.executeUpdate();
 
@@ -134,7 +123,7 @@ public class ADEmpleado {
 
         try {
             Statement Stm = _conexion.createStatement(); // Se usa un statement ya que lo que se enviará no tendrá un parámetro de entrada
-            String sentencia = "SELECT COD_EMPLEADO, ID, NOMBRE,APELLIDO1, TELEFONO, VENTAS_REALIZADAS, ESTADO, BONO FROM Empleado";
+            String sentencia = "SELECT COD_FACTURA, COD_EMPLEADO, COD_CLIENTE FROM Factura";
 
             if (!condicion.equals("")) { // Si se envío una condición
                 sentencia = String.format("%s WHERE %s", sentencia, condicion); // Interpolación de Strings 
@@ -157,14 +146,14 @@ public class ADEmpleado {
 
     //Método5
     // Devuelve una lista con objetos Categoria
-    public List<Empleado> ListaRegistros(String condicion) throws Exception {
-        List<Empleado> list1 = new ArrayList();
+    public List<Factura> ListaRegistros(String condicion) throws Exception {
+        List<Factura> list1 = new ArrayList();
         ResultSet rs = null;
 
         try {
             Statement Stm = _conexion.createStatement(); // Siempre se debe estable esta conexión con la BD
 
-            String sentencia = "SELECT COD_EMPLEADO, ID, NOMBRE,APELLIDO1, TELEFONO, VENTAS_REALIZADAS, ESTADO, BONO FROM Empleado";
+            String sentencia = "SELECT COD_FACTURA, COD_EMPLEADO, COD_CLIENTE FROM Factura";
 
             if (!condicion.equals("")) { // Si se envío una condición
                 sentencia = String.format("%s WHERE %s", sentencia, condicion); // Interpolación de Strings 
@@ -174,7 +163,7 @@ public class ADEmpleado {
 
             // Se usa un bucle siempre para saber lo que tiene un ResultSet
             while (rs.next()) { // Esto solo leerá el único registro que tiene
-                list1.add(new Empleado(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getBoolean(7), rs.getFloat(8))); // Solo le envía un objeto
+                list1.add(new Factura(rs.getInt(1), rs.getInt(2), rs.getInt(3))); // Solo le envía un objeto
             }
         } catch (Exception e) {
             throw e;
@@ -186,12 +175,12 @@ public class ADEmpleado {
     }
 
     //Método6
-    public Empleado ObtenerRegistro(String condicion) throws Exception {
-        Empleado empleado1 = new Empleado(); // este es el objeto que devolverá 
+    public Factura ObtenerRegistro(String condicion) throws Exception {
+        Factura fact = new Factura(); // este es el objeto que devolverá 
         ResultSet rs = null;
 
         try {
-            String sentencia = "SELECT COD_EMPLEADO, ID, NOMBRE,APELLIDO1, TELEFONO, VENTAS_REALIZADAS, ESTADO, BONO FROM Empleado";
+            String sentencia = "SELECT COD_FACTURA, COD_EMPLEADO, COD_CLIENTE FROM Factura";
 
             Statement Stm = _conexion.createStatement(); // Se usa create ya que no envía parametros a la sentencia
 
@@ -203,15 +192,10 @@ public class ADEmpleado {
 
             // Lo que devuelve la columna se establece a los atributos de su entidad (se usan las propiedades de encapsulamiento)
             if (rs.next()) { // Solo devolverá un registro
-                empleado1.setCod_empleado(rs.getInt(1));
-                empleado1.setId(rs.getInt(2));
-                empleado1.setNombre(rs.getString(3));
-                empleado1.setApellido1(rs.getString(4));
-                empleado1.setTelefono(rs.getString(4));
-                empleado1.setVentas_realizadas(rs.getInt(5));
-                empleado1.setEstado(rs.getBoolean(6));
-                empleado1.setBono(rs.getFloat(7));
-                empleado1.setExiste(true);
+                fact.setCod_factura(rs.getInt(1));
+                fact.setCod_empleado(rs.getInt(2));
+                fact.setCod_cliente(rs.getInt(3));
+                fact.setExiste(true);
 
             }
         } catch (Exception e) {
@@ -220,38 +204,8 @@ public class ADEmpleado {
             _conexion.close();
         }
 
-        return empleado1;
+        return fact;
     }
 
-    //Método7 - Llama un proceso almacenado para obtener el bono según las ventas realizadas especificando el empleado
-    //Recibe el id del empleado y mes
-    public float Resumir_Ventas(int cod_empleado, int mes) throws Exception {
-        float bono = 0;
-        int resultado = 0;
-
-        try {
-            CallableStatement cs = _conexion.prepareCall("{call SP_BONO(?,?,?)}");
-
-            //Se establecen los parámetros a enviar
-            cs.setInt(1, cod_empleado);
-            cs.setInt(2, mes);
-            cs.setFloat(3, bono);
-
-            //Y los parámetros OUT del SP
-            cs.registerOutParameter(3, Types.VARCHAR);
-
-            resultado = cs.executeUpdate(); // Devuelve las filas afectadas
-
-            bono = cs.getFloat(2); // Se obtiene el parámetro de salida
-
-        } catch (Exception e) {
-            throw e;
-        } finally {
-            _conexion.close();
-        }
-
-        return bono;
-    }
 // </editor-fold>
-
 }

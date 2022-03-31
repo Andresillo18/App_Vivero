@@ -53,11 +53,11 @@ public class Factura {
     public Factura() {
     }
 
-    public Factura(int cod_factura, int cod_empleado, int cod_cliente, boolean existe) {
+    public Factura(int cod_factura, int cod_empleado, int cod_cliente) {
         this.cod_factura = cod_factura;
         this.cod_empleado = cod_empleado;
         this.cod_cliente = cod_cliente;
-        this.existe = existe;
+        this.existe = true;
     }
 
 // </editor-fold>
