@@ -57,7 +57,7 @@ public class ClasPlanta {
         this.cod_clasificacion = cod_clasificacion;
         this.cod_planta = cod_planta;
         this.cod_categoria = cod_categoria;
-        this.existe = existe;
+        this.existe = true;
     }
 
 // </editor-fold>

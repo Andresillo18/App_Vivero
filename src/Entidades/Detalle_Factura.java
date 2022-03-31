@@ -1,7 +1,8 @@
 package Entidades;
 
-import java.util.Date;
-//import java.sql.Date;
+//import java.util.Date;
+
+import java.sql.Date;
 
 /**
  * 29-3-22
@@ -106,11 +107,11 @@ public class Detalle_Factura {
     }
 // </editor-fold>
 
-// <editor-fold desc="MÉTODOS" defaultstate="collapsed">    
+// <editor-fold desc="CONSTRUCTORES" defaultstate="collapsed">    
     public Detalle_Factura() {
     }
 
-    public Detalle_Factura(int cod_detalle, int cod_factura, int cod_herramienta_prod, int cantidad_herramienta_prod, int cod_planta, int cantidad_plantas, float total_pagar, Date fecha, String observaciones, boolean existe) {
+    public Detalle_Factura(int cod_detalle, int cod_factura, int cod_herramienta_prod, int cantidad_herramienta_prod, int cod_planta, int cantidad_plantas, float total_pagar, Date fecha, String observaciones) {
         this.cod_detalle = cod_detalle;
         this.cod_factura = cod_factura;
         this.cod_herramienta_prod = cod_herramienta_prod;

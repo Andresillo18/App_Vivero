@@ -1,6 +1,6 @@
 package AccesoDatos;
 
-import Entidades.ClasPlanta;
+import Entidades.Cliente;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Andrés Villalobos
  */
-public class ADClasPlanta {
+public class ADCliente {
 
     //VARIABLE GLOBAL
     private Connection _conexion; // Para conectarse a la BD
@@ -27,7 +27,7 @@ public class ADClasPlanta {
         return _mensaje;
     }
 
-    public ADClasPlanta() throws Exception {
+    public ADCliente() throws Exception {
         try {
             String url = Config.config.getConectionString(); // Se obtiene la cadena de conexión
 
@@ -38,46 +38,52 @@ public class ADClasPlanta {
         }
     }
 
-// <editor-fold desc="MÉTODOS" defaultstate="collapsed">    
+    // <editor-fold desc="MÉTODOS" defaultstate="collapsed">    
     // Método1
-    public int Insertar(ClasPlanta clasPlanta1) throws Exception {
-        int cod_clasificacion = -1; // el -1 significa que no existe, por ahora
-        String sentencia = "INSERT INTO Clasificacion_Planta (COD_PLANTA, COD_CATEGORIA) VALUES (?,?)";
+    public int Insertar(Cliente cliente1) throws Exception {
+        int cod_cliente = -1; // el -1 significa que no existe, por ahora
+        String sentencia = "INSERT INTO Cliente (ID, NOMBRE,APELLIDO1, TELEFONO, ESTADO) VALUES (?,?,?,?,?)";
 
         try {
             PreparedStatement PS = _conexion.prepareStatement(sentencia, PreparedStatement.RETURN_GENERATED_KEYS); // Envía la sentencia según la entidad y regresa las llaves auto generadas
 
             //Se registra los argumentos de la consulta            
-            PS.setInt(1, clasPlanta1.getCod_planta());
-            PS.setInt(2, clasPlanta1.getCod_categoria());
+            PS.setInt(1, cliente1.getId());
+            PS.setString(2, cliente1.getNombre());
+            PS.setString(3, cliente1.getApellido1());
+            PS.setString(4, cliente1.getTelefono());
+            PS.setBoolean(4, cliente1.isEstado());
 
             PS.execute(); // Se ejecuta la sentencia- retorna true o false 
 
             ResultSet rs = PS.getGeneratedKeys(); // El ResultSet es de una celda porque obtiene los identity de un INSERT
 
             if (rs != null && rs.next()) {
-                cod_clasificacion = rs.getInt(1); //busca el unico registro de la unica columna
-                _mensaje = "Clasificación ingresado satisfactoriamente";
+                cod_cliente = rs.getInt(1); //busca el unico registro de la unica columna
+                _mensaje = "Cliente ingresado satisfactoriamente";
             }
 
         } catch (Exception e) {
         } finally {
             _conexion.close(); // Siempre debe cerrar conexiones
         }
-        return cod_clasificacion;
+        return cod_cliente;
     }
 
     //Método2
-    public int Modificar(ClasPlanta clasPlanta1) throws Exception {
+    public int Modificar(Cliente cliente1) throws Exception {
         int result = 0; // No ha obtenido ningún resultado        
-        String sentencia = "UPDATE Clasificacion_Planta SET COD_PLANTA = ?, COD_CATEGORIA =? WHERE COD_CLASIFICACION = ? ";
+        String sentencia = "UPDATE Cliente SET ID = ?, NOMBRE =?, APELLIDO1 =?, TELEFONO=?, ESTADO =? WHERE COD_CLIENTE = ? ";
 
         try {
             PreparedStatement ps = _conexion.prepareStatement(sentencia);
 
-            ps.setInt(1, clasPlanta1.getCod_planta());
-            ps.setInt(2, clasPlanta1.getCod_categoria());
-            ps.setInt(3, clasPlanta1.getCod_clasificacion());
+            ps.setInt(1, cliente1.getId());
+            ps.setString(2, cliente1.getNombre());
+            ps.setString(3, cliente1.getApellido1());
+            ps.setString(4, cliente1.getTelefono());
+            ps.setBoolean(5, cliente1.isEstado());
+            ps.setInt(6, cliente1.getCod_cliente());
 
             result = ps.executeUpdate();
 
@@ -94,14 +100,14 @@ public class ADClasPlanta {
     }
 
     //Método3
-    public int Eliminar(ClasPlanta clasPlanta1) throws Exception {
+    public int Eliminar(Cliente cliente1) throws Exception {
         int result = 0;
-        String sentencia = "DELETE Clasificacion_Planta WHERE COD_CLASIFICACION = ?";
+        String sentencia = "DELETE Cliente WHERE COD_CLIENTE = ?";
 
         try {
             PreparedStatement ps = _conexion.prepareStatement(sentencia);
 
-                 ps.setInt(1, clasPlanta1.getCod_clasificacion());
+            ps.setInt(1, cliente1.getCod_cliente());
 
             result = ps.executeUpdate();
 
@@ -123,7 +129,7 @@ public class ADClasPlanta {
 
         try {
             Statement Stm = _conexion.createStatement(); // Se usa un statement ya que lo que se enviará no tendrá un parámetro de entrada
-            String sentencia = "SELECT COD_CLASIFICACION, COD_PLANTA, COD_CATEGORIA FROM Clasificacion_Planta";
+            String sentencia = "SELECT COD_CLIENTE, ID, NOMBRE,APELLIDO1, TELEFONO, ESTADO FROM Cliente";
 
             if (!condicion.equals("")) { // Si se envío una condición
                 sentencia = String.format("%s WHERE %s", sentencia, condicion); // Interpolación de Strings 
@@ -145,15 +151,15 @@ public class ADClasPlanta {
     }
 
     //Método5
-    // Devuelve una lista con objetos 
-    public List<ClasPlanta> ListaRegistros(String condicion) throws Exception {
-        List<ClasPlanta> list1 = new ArrayList();
+    // Devuelve una lista con objetos Categoria
+    public List<Cliente> ListaRegistros(String condicion) throws Exception {
+        List<Cliente> list1 = new ArrayList();
         ResultSet rs = null;
 
         try {
             Statement Stm = _conexion.createStatement(); // Siempre se debe estable esta conexión con la BD
 
-            String sentencia = "SELECT COD_CLASIFICACION, COD_PLANTA, COD_CATEGORIA FROM Clasificacion_Planta";
+            String sentencia = "SELECT COD_CLIENTE, ID, NOMBRE,APELLIDO1, TELEFONO, ESTADO FROM Cliente";
 
             if (!condicion.equals("")) { // Si se envío una condición
                 sentencia = String.format("%s WHERE %s", sentencia, condicion); // Interpolación de Strings 
@@ -163,7 +169,7 @@ public class ADClasPlanta {
 
             // Se usa un bucle siempre para saber lo que tiene un ResultSet
             while (rs.next()) { // Esto solo leerá el único registro que tiene
-                list1.add(new ClasPlanta(rs.getInt(1), rs.getInt(2), rs.getInt(3))); // Solo le envía un objeto
+                list1.add(new Cliente(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getBoolean(6))); // Solo le envía un objeto
             }
         } catch (Exception e) {
             throw e;
@@ -175,12 +181,12 @@ public class ADClasPlanta {
     }
 
     //Método6
-    public ClasPlanta ObtenerRegistro(String condicion) throws Exception {
-        ClasPlanta clasPlanta1 = new ClasPlanta(); // este es el objeto que devolverá 
+    public Cliente ObtenerRegistro(String condicion) throws Exception {
+        Cliente cliente1 = new Cliente(); // este es el objeto que devolverá 
         ResultSet rs = null;
 
         try {
-            String sentencia = "SELECT COD_CLASIFICACION, COD_PLANTA, COD_CATEGORIA FROM Clasificacion_Planta";
+            String sentencia = "SELECT COD_CLIENTE, ID, NOMBRE,APELLIDO1, TELEFONO, ESTADO FROM Cliente";
             Statement Stm = _conexion.createStatement(); // Se usa create ya que no envía parametros a la sentencia
 
             if (!condicion.equals("")) {
@@ -191,10 +197,13 @@ public class ADClasPlanta {
 
             // Lo que devuelve la columna se establece a los atributos de su entidad (se usan las propiedades de encapsulamiento)
             if (rs.next()) { // Solo devolverá un registro
-                clasPlanta1.setCod_clasificacion(rs.getInt(1));
-                clasPlanta1.setCod_planta(rs.getInt(2));
-                clasPlanta1.setCod_categoria(rs.getInt(3));
-                clasPlanta1.setExiste(true);
+                cliente1.setCod_cliente(rs.getInt(1));
+                cliente1.setId(rs.getInt(2));
+                cliente1.setNombre(rs.getString(3));
+                cliente1.setApellido1(rs.getString(4));
+                cliente1.setTelefono(rs.getString(5));
+                cliente1.setEstado(rs.getBoolean(6));
+                cliente1.setExiste(true);
             }
         } catch (Exception e) {
             throw e;
@@ -202,7 +211,7 @@ public class ADClasPlanta {
             _conexion.close();
         }
 
-        return clasPlanta1;
+        return cliente1;
     }
 // </editor-fold>
 

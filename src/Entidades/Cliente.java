@@ -41,13 +41,14 @@ public class Cliente extends Persona{
         this.existe = existe;
     }
 
-    public Cliente(int cod_cliente, boolean existe, String id, String nombre, String Apellido1, String telefono, boolean estado) {
+    public Cliente(int cod_cliente, int id, String nombre, String Apellido1, String telefono, boolean estado) {
         super(id, nombre, Apellido1, telefono, estado);
         this.cod_cliente = cod_cliente;
-        this.existe = existe;
+        this.existe = true;
     }
     
 // </editor-fold>
+    
 // <editor-fold desc="MÉTODOS" defaultstate="collapsed">
     @Override
     public void Crear() {
