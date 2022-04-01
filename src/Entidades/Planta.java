@@ -95,6 +95,6 @@ public class Planta extends Inventario {
     public void Modificar() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-// </editor-fold>   
+// </editor-fold>    
 
 }

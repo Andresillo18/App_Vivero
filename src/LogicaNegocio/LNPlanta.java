@@ -21,8 +21,8 @@ public class LNPlanta {
         return _mensaje;
     }
 
-    public LNPlanta(String _mensaje) {
-        this._mensaje = _mensaje;
+    public LNPlanta() {
+        this._mensaje = "";
     }
 
     // <editor-fold desc="MÉTODOS" defaultstate="collapsed">   
