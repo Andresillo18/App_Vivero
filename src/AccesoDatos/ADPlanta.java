@@ -1,6 +1,6 @@
 package AccesoDatos;
 
-import Entidades.Herramienta_Producto;
+import Entidades.Planta;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Andrés Villalobos
  */
-public class ADHerram_Prod {
+public class ADPlanta {
 
     //VARIABLE GLOBAL
     private Connection _conexion; // Para conectarse a la BD
@@ -27,7 +27,7 @@ public class ADHerram_Prod {
         return _mensaje;
     }
 
-    public ADHerram_Prod() throws Exception {
+    public ADPlanta() throws Exception {
         try {
             String url = Config.config.getConectionString(); // Se obtiene la cadena de conexión
 
@@ -40,20 +40,21 @@ public class ADHerram_Prod {
 
     // <editor-fold desc="MÉTODOS" defaultstate="collapsed">    
     // Método1
-    public int Insertar(Herramienta_Producto Herram_Prod) throws Exception {
+    public int Insertar(Planta planta1) throws Exception {
         int cod_factura = -1; // el -1 significa que no existe, por ahora
-        String sentencia = "INSERT INTO Herramienta_Producto (NOMBRE, DESCRIPCION, PRECIO, CANTIDAD_DISPONIBLE, MATERIAL, FECHA_VENCIMIENTO) VALUES (?,?,?,?,?,?)";
+        String sentencia = "INSERT INTO Planta (NOMBRE, DESCRIPCION, PRECIO, CANTIDAD_DISPONIBLE, CANTIDAD_REGADO, TIEMPOLUZ_SOLAR, EXTRAS_CARACTERISTICAS) VALUES (?,?,?,?,?,?,?)";
 
         try {
             PreparedStatement PS = _conexion.prepareStatement(sentencia, PreparedStatement.RETURN_GENERATED_KEYS); // Envía la sentencia según la entidad y regresa las llaves auto generadas
 
             //Se registra los argumentos de la consulta                        
-            PS.setString(1, Herram_Prod.getNombre());
-            PS.setString(2, Herram_Prod.getDescripcion());
-            PS.setFloat(3, Herram_Prod.getPrecio());
-            PS.setInt(4, Herram_Prod.getCantidad_disponible());
-            PS.setString(5, Herram_Prod.getMaterial());
-            PS.setDate(6, Herram_Prod.getFechaVencimiento());
+            PS.setString(1, planta1.getNombre());
+            PS.setString(2, planta1.getDescripcion());
+            PS.setFloat(3, planta1.getPrecio());
+            PS.setInt(4, planta1.getCantidad_disponible());
+            PS.setInt(5, planta1.getCantidad_Regado());
+            PS.setFloat(6, planta1.getTiempo_luz_solar());
+            PS.setString(7, planta1.getExtras_caracteristicas());
 
             PS.execute(); // Se ejecuta la sentencia- retorna true o false 
 
@@ -61,7 +62,7 @@ public class ADHerram_Prod {
 
             if (rs != null && rs.next()) {
                 cod_factura = rs.getInt(1); //busca el unico registro de la unica columna
-                _mensaje = "Herramienta o Producto ingresado satisfactoriamente";
+                _mensaje = "Planta ingresado satisfactoriamente";
             }
 
         } catch (Exception e) {
@@ -72,20 +73,21 @@ public class ADHerram_Prod {
     }
 
     //Método2
-    public int Modificar(Herramienta_Producto Herram_Prod) throws Exception {
+    public int Modificar(Planta planta1) throws Exception {
         int result = 0; // No ha obtenido ningún resultado        
-        String sentencia = "UPDATE Herramienta_Producto SET NOMBRE = ?, DESCRIPCION =?, PRECIO= ?,CANTIDAD_DISPONIBLE=?,MATERIAL=?, FECHA_VENCIMIENTO=? WHERE COD_HERRAMIENTA_PROD = ? ";
+        String sentencia = "UPDATE Planta SET NOMBRE = ?, DESCRIPCION =?, PRECIO= ?,CANTIDAD_DISPONIBLE=?,CANTIDAD_REGADO=?, TIEMPOLUZ_SOLAR=?, EXTRAS_CARACTERISTICAS=? WHERE COD_PLANTA = ? ";
 
         try {
             PreparedStatement ps = _conexion.prepareStatement(sentencia);
 
-            ps.setString(1, Herram_Prod.getNombre());
-            ps.setString(2, Herram_Prod.getDescripcion());
-            ps.setFloat(3, Herram_Prod.getPrecio());
-            ps.setInt(4, Herram_Prod.getCantidad_disponible());
-            ps.setString(5, Herram_Prod.getMaterial());
-            ps.setDate(6, Herram_Prod.getFechaVencimiento());
-            ps.setInt(7, Herram_Prod.getCod_herramienta_prod());
+            ps.setString(1, planta1.getNombre());
+            ps.setString(2, planta1.getDescripcion());
+            ps.setFloat(3, planta1.getPrecio());
+            ps.setInt(4, planta1.getCantidad_disponible());
+            ps.setInt(5, planta1.getCantidad_Regado());
+            ps.setFloat(6, planta1.getTiempo_luz_solar());
+            ps.setString(7, planta1.getExtras_caracteristicas());
+            ps.setInt(8, planta1.getCod_planta());
 
             result = ps.executeUpdate();
 
@@ -102,14 +104,14 @@ public class ADHerram_Prod {
     }
 
     //Método3
-    public int Eliminar(Herramienta_Producto Herram_Prod) throws Exception {
+    public int Eliminar(Planta planta1) throws Exception {
         int result = 0;
-        String sentencia = "DELETE Herramienta_Producto WHERE COD_HERRAMIENTA_PROD = ?";
+        String sentencia = "DELETE Planta WHERE COD_PLANTA= ?";
 
         try {
             PreparedStatement ps = _conexion.prepareStatement(sentencia);
 
-            ps.setInt(1, Herram_Prod.getCod_herramienta_prod());
+            ps.setInt(1, planta1.getCod_planta());
 
             result = ps.executeUpdate();
 
@@ -131,7 +133,7 @@ public class ADHerram_Prod {
 
         try {
             Statement Stm = _conexion.createStatement(); // Se usa un statement ya que lo que se enviará no tendrá un parámetro de entrada
-            String sentencia = "SELECT COD_HERRAMIENTA_PROD, NOMBRE, DESCRIPCION, PRECIO, CANTIDAD_DISPONIBLE, MATERIAL,FECHA_VENCIMIENTO FROM Herramienta_Producto";
+            String sentencia = "SELECT COD_PLANTA, NOMBRE, DESCRIPCION, PRECIO, CANTIDAD_DISPONIBLE, CANTIDAD_REGADO,TIEMPOLUZ_SOLAR, EXTRAS_CARACTERISTICAS FROM Planta";
 
             if (!condicion.equals("")) { // Si se envío una condición
                 sentencia = String.format("%s WHERE %s", sentencia, condicion); // Interpolación de Strings 
@@ -154,14 +156,14 @@ public class ADHerram_Prod {
 
     //Método5
     // Devuelve una lista con objetos Categoria
-    public List<Herramienta_Producto> ListaRegistros(String condicion) throws Exception {
-        List<Herramienta_Producto> list1 = new ArrayList();
+    public List<Planta> ListaRegistros(String condicion) throws Exception {
+        List<Planta> list1 = new ArrayList();
         ResultSet rs = null;
 
         try {
             Statement Stm = _conexion.createStatement(); // Siempre se debe estable esta conexión con la BD
 
-            String sentencia = "SELECT COD_HERRAMIENTA_PROD, NOMBRE, DESCRIPCION, PRECIO, CANTIDAD_DISPONIBLE, MATERIAL,FECHA_VENCIMIENTO FROM Herramienta_Producto";
+            String sentencia = "SELECT COD_PLANTA, NOMBRE, DESCRIPCION, PRECIO, CANTIDAD_DISPONIBLE, CANTIDAD_REGADO,TIEMPOLUZ_SOLAR, EXTRAS_CARACTERISTICAS FROM Planta";
 
             if (!condicion.equals("")) { // Si se envío una condición
                 sentencia = String.format("%s WHERE %s", sentencia, condicion); // Interpolación de Strings 
@@ -171,7 +173,7 @@ public class ADHerram_Prod {
 
             // Se usa un bucle siempre para saber lo que tiene un ResultSet
             while (rs.next()) { // Esto solo leerá el único registro que tiene
-                list1.add(new Herramienta_Producto(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getFloat(4), rs.getInt(5), rs.getString(6), rs.getDate(7))); // Solo le envía un objeto
+                list1.add(new Planta(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getFloat(4), rs.getInt(5), rs.getInt(6), rs.getFloat(7), rs.getString(8))); // Solo le envía un objeto
             }
         } catch (Exception e) {
             throw e;
@@ -183,12 +185,12 @@ public class ADHerram_Prod {
     }
 
     //Método6
-    public Herramienta_Producto ObtenerRegistro(String condicion) throws Exception {
-        Herramienta_Producto Herram_Prod = new Herramienta_Producto(); // este es el objeto que devolverá 
+    public Planta ObtenerRegistro(String condicion) throws Exception {
+        Planta planta1 = new Planta(); // este es el objeto que devolverá 
         ResultSet rs = null;
 
         try {
-            String sentencia = "SELECT COD_HERRAMIENTA_PROD, NOMBRE, DESCRIPCION, PRECIO, CANTIDAD_DISPONIBLE, MATERIAL,FECHA_VENCIMIENTO FROM Herramienta_Producto";
+            String sentencia = "SELECT COD_PLANTA, NOMBRE, DESCRIPCION, PRECIO, CANTIDAD_DISPONIBLE, CANTIDAD_REGADO,TIEMPOLUZ_SOLAR, EXTRAS_CARACTERISTICAS FROM Planta";
 
             Statement Stm = _conexion.createStatement(); // Se usa create ya que no envía parametros a la sentencia
 
@@ -200,14 +202,15 @@ public class ADHerram_Prod {
 
             // Lo que devuelve la columna se establece a los atributos de su entidad (se usan las propiedades de encapsulamiento)
             if (rs.next()) { // Solo devolverá un registro
-                Herram_Prod.setCod_herramienta_prod(rs.getInt(1));
-                Herram_Prod.setNombre(rs.getString(2));
-                Herram_Prod.setDescripcion(rs.getString(3));
-                Herram_Prod.setPrecio(rs.getFloat(3));
-                Herram_Prod.setCantidad_disponible(rs.getInt(3));
-                Herram_Prod.setMaterial(rs.getString(3));
-                Herram_Prod.setFechaVencimiento(rs.getDate(3));
-                Herram_Prod.setExiste(true);
+                planta1.setCod_planta(rs.getInt(1));
+                planta1.setNombre(rs.getString(2));
+                planta1.setDescripcion(rs.getString(3));
+                planta1.setPrecio(rs.getFloat(4));
+                planta1.setCantidad_disponible(rs.getInt(5));
+                planta1.setCantidad_Regado(rs.getInt(6));
+                planta1.setTiempo_luz_solar(rs.getFloat(7));
+                planta1.setExtras_caracteristicas(rs.getString(8));
+                planta1.setExiste(true);
 
             }
         } catch (Exception e) {
@@ -216,7 +219,7 @@ public class ADHerram_Prod {
             _conexion.close();
         }
 
-        return Herram_Prod;
+        return planta1;
     }
 
 // </editor-fold>

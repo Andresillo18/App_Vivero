@@ -69,13 +69,13 @@ public class Planta extends Inventario {
         this.existe = existe;
     }
 
-    public Planta(int cod_planta, int cantidad_Regado, float tiempo_luz_solar, String extras_caracteristicas, boolean existe, String nombre, String descripcion, float precio, int cantidad_disponible) {
+    public Planta(int cod_planta, String nombre, String descripcion, float precio, int cantidad_disponible, int cantidad_Regado, float tiempo_luz_solar, String extras_caracteristicas) {
         super(nombre, descripcion, precio, cantidad_disponible);
         this.cod_planta = cod_planta;
         this.cantidad_Regado = cantidad_Regado;
         this.tiempo_luz_solar = tiempo_luz_solar;
         this.extras_caracteristicas = extras_caracteristicas;
-        this.existe = existe;
+        this.existe = true;
     }
 
 // </editor-fold>

@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *31-3-22
+ * 31-3-22
+ *
  * @author Andrés Villalobos
  */
 public class ADEmpleado {
@@ -225,7 +226,7 @@ public class ADEmpleado {
 
     //Método7 - Llama un proceso almacenado para obtener el bono según las ventas realizadas especificando el empleado
     //Recibe el id del empleado y mes
-    public float Resumir_Ventas(int cod_empleado, int mes) throws Exception {
+    public float ObtenerBono(int cod_empleado, int mes) throws Exception {
         float bono = 0;
         int resultado = 0;
 
@@ -242,7 +243,9 @@ public class ADEmpleado {
 
             resultado = cs.executeUpdate(); // Devuelve las filas afectadas
 
-            bono = cs.getFloat(2); // Se obtiene el parámetro de salida
+            if (resultado > 0) {
+                bono = cs.getFloat(2); // Se obtiene el parámetro de salida
+            }
 
         } catch (Exception e) {
             throw e;

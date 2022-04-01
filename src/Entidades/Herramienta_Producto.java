@@ -1,6 +1,7 @@
 package Entidades;
 
-import java.util.Date;
+//import java.util.Date;
+import java.sql.Date;
 
 /**
  * 28-3-22
@@ -63,12 +64,12 @@ public class Herramienta_Producto extends Inventario {
         this.existe = existe;
     }
 
-    public Herramienta_Producto(int cod_herramienta_prod, String material, Date fechaVencimiento, boolean existe, String nombre, String descripcion, float precio, int cantidad_disponible) {
+    public Herramienta_Producto(int cod_herramienta_prod, String nombre, String descripcion, float precio, int cantidad_disponible, String material, Date fechaVencimiento) {
         super(nombre, descripcion, precio, cantidad_disponible);
         this.cod_herramienta_prod = cod_herramienta_prod;
         this.material = material;
         this.fechaVencimiento = fechaVencimiento;
-        this.existe = existe;
+        this.existe = true;
     }
 
 // </editor-fold>   
