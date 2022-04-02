@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 
  * 31-3-22
- *
  * @author Andrés Villalobos
  */
 public class LNCategoria {
