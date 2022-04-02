@@ -8,25 +8,26 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  * 1-4-22
+ *
  * @author Andrés Villalobos
  */
 public class frmCategoria extends javax.swing.JDialog {
-    
+
     //Al instanciar el objeto se sobreescribe el método
     DefaultTableModel modelo;
-    
+
     public frmCategoria() {
         initComponents();
-        
+
         this.setLocationRelativeTo(null);
-        
-         try {
+
+        try {
             CargarDatos("");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
     }
-  
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -190,7 +191,6 @@ public class frmCategoria extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
 // <editor-fold desc="Limpiar Tabla" defaultstate="collapsed">    
     private void LimpiarTablas() {
         // Se hace un overide cuando se hace la instancia
@@ -200,7 +200,7 @@ public class frmCategoria extends javax.swing.JDialog {
                 return false;
             }
         };
-        
+
         tblCategorias.setModel(modelo); // La tabla se le establece el modelo y el modelo tiene los datos a ingresar
         modelo.addColumn("Código");
         modelo.addColumn("Nombre");
@@ -209,11 +209,11 @@ public class frmCategoria extends javax.swing.JDialog {
         modelo.addColumn("Cantidad Disponible");
     }
 // </editor-fold> 
-    
+
 // <editor-fold desc="MÉTODO CARGAR DATOS" defaultstate="collapsed">    
     //Mostrar en la tabla del formulario el contenido de la tabala Clientes de la BD
     private void CargarDatos(String condicion) throws Exception {
-        
+
         try {
             LNCategoria logica = new LNCategoria();
             List<Categoria> lista;
@@ -226,17 +226,17 @@ public class frmCategoria extends javax.swing.JDialog {
             for (Categoria categoria : lista) {
                 fila[0] = categoria.getCod_categoria();
                 fila[1] = categoria.getNombre_categoria();
-                fila[2] = categoria.getDescripcion();             
-                
+                fila[2] = categoria.getDescripcion();
+
                 modelo.addRow(fila);
             }
         } catch (Exception e) {
             throw e;
         }
-        
+
     }
 // </editor-fold>  
-    
+
 // <editor-fold desc="MÉTODO GENERAR ENTIDAD" defaultstate="collapsed">    
     private Categoria GenerarEntidad() {
         Categoria categoria1 = new Categoria();
@@ -246,11 +246,11 @@ public class frmCategoria extends javax.swing.JDialog {
         }
         categoria1.setNombre_categoria(cbNombre.getSelectedItem().toString());
         categoria1.setDescripcion(txtDescripcion.getText());
-        
+
         return categoria1;
     }
 // </editor-fold>        
-    
+
 // <editor-fold desc="Limpiar" defaultstate="collapsed">
     private void Limpiar() {
         txtCod.setText("");
@@ -258,7 +258,7 @@ public class frmCategoria extends javax.swing.JDialog {
         txtDescripcion.setText("");
     }
 // </editor-fold>
-    
+
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
@@ -268,16 +268,21 @@ public class frmCategoria extends javax.swing.JDialog {
         Categoria categoria1 = GenerarEntidad();
 
         try {
-            if (categoria1.isExiste()) {
-                logica.Modificar(categoria1);
+            if (!txtDescripcion.getText().equals("")) {
+
+                if (categoria1.isExiste()) {
+                    logica.Modificar(categoria1);
+                } else {
+                    logica.Insertar(categoria1);
+                }
+                JOptionPane.showMessageDialog(this, logica.getMensaje());
+
+                Limpiar();
+
+                CargarDatos("");
             } else {
-                logica.Insertar(categoria1);
+
             }
-            JOptionPane.showMessageDialog(this, logica.getMensaje());
-
-            Limpiar();
-
-            CargarDatos("");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
@@ -314,7 +319,7 @@ public class frmCategoria extends javax.swing.JDialog {
 
     private void tblCategoriasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCategoriasMouseClicked
 
-          try {
+        try {
             LNCategoria logica = new LNCategoria();
             Categoria categoria1;
             String condicion;
@@ -332,7 +337,7 @@ public class frmCategoria extends javax.swing.JDialog {
 
                 txtCod.setText(String.valueOf(categoria1.getCod_categoria()));
                 cbNombre.setSelectedItem(String.valueOf(categoria1.getNombre_categoria()));
-                txtDescripcion.setText(String.valueOf(categoria1.getDescripcion()));                
+                txtDescripcion.setText(String.valueOf(categoria1.getDescripcion()));
 
             }
         } catch (Exception e) {

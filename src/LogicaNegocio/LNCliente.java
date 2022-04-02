@@ -20,8 +20,8 @@ public class LNCliente {
         return _mensaje;
     }
 
-    public LNCliente(String _mensaje) {
-        this._mensaje = _mensaje;
+    public LNCliente() {
+        this._mensaje = "";
     }
     
 // <editor-fold desc="MÉTODOS" defaultstate="collapsed">    

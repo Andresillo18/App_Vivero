@@ -371,7 +371,6 @@ public class frmPlanta extends javax.swing.JInternalFrame {
         ClasPlanta clasPlanta1 = new ClasPlanta();
 
 //        clasPlanta1.setExiste(true);
-
         clasPlanta1.setCod_planta(Integer.parseInt(txtCod.getText()));
         clasPlanta1.setCod_categoria(Integer.parseInt(txtCategoria.getText()));
 
@@ -402,26 +401,29 @@ public class frmPlanta extends javax.swing.JInternalFrame {
         Planta planta = GenerarEntidad();
 
         try {
+            if (!txtNombre.getText().equals("") && !txtCantidadDisponible.getValue().equals("") && !txtCantidadRegado.getValue().equals("") && !txtTiempoLuz1.getValue().equals("") && !txtDescripcion.getText().equals("") && !txtPrecio.getValue().equals("") && !txtCategoria.getText().equals("")) {
 
-            // Esto es para establecer que categorias tiene cada tabla
-            ClasPlanta clasPlanta1 = GenerarEntidad2();
-            LNClasPlanta logica2 = new LNClasPlanta();
+                // Esto es para establecer que categorias tiene cada tabla
+                ClasPlanta clasPlanta1 = GenerarEntidad2();
+                LNClasPlanta logica2 = new LNClasPlanta();
 
-            if (planta.isExiste()) {
-                logica.Modificar(planta);
+                if (planta.isExiste()) {
+                    logica.Modificar(planta);
+                } else {
+                    logica.Insertar(planta);
+                }
+                JOptionPane.showMessageDialog(this, logica.getMensaje());
+
+                //***
+                logica2.Insertar(clasPlanta1);
+                JOptionPane.showMessageDialog(this, logica2.getMensaje());
+
+                Limpiar();
+
+                CargarDatos("");
             } else {
-                logica.Insertar(planta);
+                JOptionPane.showMessageDialog(null, "Falta ingresar datos");
             }
-            JOptionPane.showMessageDialog(this, logica.getMensaje());
-
-            //***
-            logica2.Insertar(clasPlanta1);
-            JOptionPane.showMessageDialog(this, logica2.getMensaje());
-            
-            Limpiar();
-
-            CargarDatos("");
-
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }

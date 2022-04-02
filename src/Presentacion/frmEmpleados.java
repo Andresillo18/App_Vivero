@@ -314,7 +314,7 @@ public class frmEmpleados extends javax.swing.JDialog {
         modelo.addColumn("ID");
         modelo.addColumn("Nombre");
         modelo.addColumn("Ventas");
-        modelo.addColumn("Estado");
+        modelo.addColumn("Teléfono");
     }
 // </editor-fold> 
 
@@ -404,16 +404,21 @@ public class frmEmpleados extends javax.swing.JDialog {
         Empleado empleado1 = GenerarEntidad();
 
         try {
-            if (empleado1.isExiste()) {
-                logica.Modificar(empleado1);
+            if (!txtID.getText().equals("") && !txtNombre.getText().equals("") && !txtApellido.getText().equals("") && !txtTelefono.getText().equals("") && !txtVentasRealizadas.getValue().equals("") && !txtBono.getValue().equals("")) {
+
+                if (empleado1.isExiste()) {
+                    logica.Modificar(empleado1);
+                } else {
+                    logica.Insertar(empleado1);
+                }
+                JOptionPane.showMessageDialog(this, logica.getMensaje());
+
+                Limpiar();
+
+                CargarDatos("");
             } else {
-                logica.Insertar(empleado1);
+                JOptionPane.showMessageDialog(null, "Falta ingresar datos");
             }
-            JOptionPane.showMessageDialog(this, logica.getMensaje());
-
-            Limpiar();
-
-            CargarDatos("");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }

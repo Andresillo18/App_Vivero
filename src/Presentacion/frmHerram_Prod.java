@@ -340,16 +340,21 @@ public class frmHerram_Prod extends javax.swing.JInternalFrame {
         Herramienta_Producto HP = GenerarEntidad();
 
         try {
-            if (HP.isExiste()) {
-                logica.Modificar(HP);
+            if (!txtNombre.getText().equals("") && !txtCantidadDisponible.getValue().equals("") && !txtDescripcion.getText().equals("") && !txtPrecio.getValue().equals("") && DCFechaVencimi.getDate() != null) {
+
+                if (HP.isExiste()) {
+                    logica.Modificar(HP);
+                } else {
+                    logica.Insertar(HP);
+                }
+                JOptionPane.showMessageDialog(this, logica.getMensaje());
+
+                Limpiar();
+
+                CargarDatos("");
             } else {
-                logica.Insertar(HP);
+                JOptionPane.showMessageDialog(null, "Falta ingresar datos");
             }
-            JOptionPane.showMessageDialog(this, logica.getMensaje());
-
-            Limpiar();
-
-            CargarDatos("");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
@@ -368,7 +373,7 @@ public class frmHerram_Prod extends javax.swing.JInternalFrame {
                     Limpiar();
                     CargarDatos("");
                 } else { // Si afectó a CERO registros
-                    JOptionPane.showMessageDialog(this, "No fue posible eliminar la planta");
+                    JOptionPane.showMessageDialog(this, "No fue posible eliminar la herramienta o producto");
                 }
 
             } else { // Si el cliente no existe (txtCodigo está vacío)

@@ -52,7 +52,7 @@ public class ADCliente {
             PS.setString(2, cliente1.getNombre());
             PS.setString(3, cliente1.getApellido1());
             PS.setString(4, cliente1.getTelefono());
-            PS.setBoolean(4, cliente1.isEstado());
+            PS.setBoolean(5, cliente1.isEstado());
 
             PS.execute(); // Se ejecuta la sentencia- retorna true o false 
 

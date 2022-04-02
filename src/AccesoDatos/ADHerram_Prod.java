@@ -83,7 +83,7 @@ public class ADHerram_Prod {
             ps.setString(2, Herram_Prod.getDescripcion());
             ps.setFloat(3, Herram_Prod.getPrecio());
             ps.setInt(4, Herram_Prod.getCantidad_disponible());
-            ps.setString(5, Herram_Prod.getMaterial());
+            ps.setString(5, Herram_Prod.getMaterial());            
             ps.setDate(6, Herram_Prod.getFechaVencimiento());
             ps.setInt(7, Herram_Prod.getCod_herramienta_prod());
 
