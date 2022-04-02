@@ -203,10 +203,10 @@ public class ADHerram_Prod {
                 Herram_Prod.setCod_herramienta_prod(rs.getInt(1));
                 Herram_Prod.setNombre(rs.getString(2));
                 Herram_Prod.setDescripcion(rs.getString(3));
-                Herram_Prod.setPrecio(rs.getFloat(3));
-                Herram_Prod.setCantidad_disponible(rs.getInt(3));
-                Herram_Prod.setMaterial(rs.getString(3));
-                Herram_Prod.setFechaVencimiento(rs.getDate(3));
+                Herram_Prod.setPrecio(rs.getFloat(4));
+                Herram_Prod.setCantidad_disponible(rs.getInt(5));
+                Herram_Prod.setMaterial(rs.getString(6));
+                Herram_Prod.setFechaVencimiento(rs.getDate(7));
                 Herram_Prod.setExiste(true);
 
             }

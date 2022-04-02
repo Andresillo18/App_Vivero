@@ -32,6 +32,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Productos - Herramientas"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuHerraProdActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

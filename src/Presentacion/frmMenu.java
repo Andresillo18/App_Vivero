@@ -65,6 +65,11 @@ public class frmMenu extends javax.swing.JFrame { // tiene todos los componentes
 
         mnuHerraProd.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
         mnuHerraProd.setText("Productos - Herramientas");
+        mnuHerraProd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuHerraProdActionPerformed(evt);
+            }
+        });
         jMenu4.add(mnuHerraProd);
 
         jMenuBar2.add(jMenu4);
@@ -131,6 +136,27 @@ public class frmMenu extends javax.swing.JFrame { // tiene todos los componentes
     private void mnuSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mnuSalirMouseClicked
         this.dispose(); // Cierra la ventana
     }//GEN-LAST:event_mnuSalirMouseClicked
+
+    private void mnuHerraProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuHerraProdActionPerformed
+
+        frmHerram_Prod frm = new frmHerram_Prod();
+
+        escritorio.add(frm);
+        frm.toFront();
+        frm.setVisible(true);
+
+// CENTRAR EL FORMULARIO INTERNO: __________________
+// el tamaño de la ventana contenedor:
+        Dimension size = escritorio.getSize();
+// tamaño del formulario interno:
+        Dimension sizeForm = frm.getSize();
+
+        frm.setLocation(((int) size.getWidth() - (int) sizeForm.getWidth()) / 2, ((int) size.getHeight() - (int) sizeForm.getHeight()) / 2); // recibe un valor de la X y de la Y
+
+        frm.toFront();
+        frm.setVisible(true);
+
+    }//GEN-LAST:event_mnuHerraProdActionPerformed
 
     /**
      * @param args the command line arguments

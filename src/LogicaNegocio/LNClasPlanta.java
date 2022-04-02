@@ -21,8 +21,8 @@ public class LNClasPlanta {
         return _mensaje;
     }
 
-    public LNClasPlanta(String _mensaje) {
-        this._mensaje = _mensaje;
+    public LNClasPlanta() {
+        this._mensaje = "";
     }
 
 // <editor-fold desc="MÉTODOS" defaultstate="collapsed">   

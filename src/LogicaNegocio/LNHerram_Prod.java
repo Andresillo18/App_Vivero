@@ -21,8 +21,8 @@ public class LNHerram_Prod {
         return _mensaje;
     }
 
-    public LNHerram_Prod(String _mensaje) {
-        this._mensaje = _mensaje;
+    public LNHerram_Prod() {
+        this._mensaje = "";
     }
 
     // <editor-fold desc="MÉTODOS" defaultstate="collapsed">    

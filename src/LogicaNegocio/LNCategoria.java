@@ -21,8 +21,8 @@ public class LNCategoria {
         return _mensaje;
     }
 
-    public LNCategoria(String _mensaje) {
-        this._mensaje = _mensaje;
+    public LNCategoria() {
+        this._mensaje = "";
     }
 
 // <editor-fold desc="MÉTODOS" defaultstate="collapsed">   
