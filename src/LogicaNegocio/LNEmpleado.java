@@ -21,8 +21,8 @@ public class LNEmpleado {
         return _mensaje;
     }
 
-    public LNEmpleado(String _mensaje) {
-        this._mensaje = _mensaje;
+    public LNEmpleado() {
+        this._mensaje = "";
     }
 
     // <editor-fold desc="MÉTODOS" defaultstate="collapsed">    

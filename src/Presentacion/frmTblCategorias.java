@@ -1,9 +1,7 @@
 package Presentacion;
 
 import Entidades.Categoria;
-import Entidades.Planta;
 import LogicaNegocio.LNCategoria;
-import LogicaNegocio.LNPlanta;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -103,11 +101,11 @@ public class frmTblCategorias extends javax.swing.JDialog {
                 return false;
             }
         };
-        
-           tblCategorias.setModel(modelo); // La tabla se le establece el modelo y el modelo tiene los datos a ingresar
+
+        tblCategorias.setModel(modelo); // La tabla se le establece el modelo y el modelo tiene los datos a ingresar
         modelo.addColumn("Código");
         modelo.addColumn("Nombre");
-        modelo.addColumn("Descripción"); 
+        modelo.addColumn("Descripción");
     }
 // </editor-fold> 
 
@@ -127,7 +125,7 @@ public class frmTblCategorias extends javax.swing.JDialog {
             for (Categoria categoria1 : lista) {
                 fila[0] = categoria1.getCod_categoria();
                 fila[1] = categoria1.getNombre_categoria();
-                fila[2] = categoria1.getDescripcion();     
+                fila[2] = categoria1.getDescripcion();
 
                 modelo.addRow(fila);
             }

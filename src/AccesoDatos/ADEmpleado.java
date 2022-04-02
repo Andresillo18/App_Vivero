@@ -208,10 +208,10 @@ public class ADEmpleado {
                 empleado1.setId(rs.getInt(2));
                 empleado1.setNombre(rs.getString(3));
                 empleado1.setApellido1(rs.getString(4));
-                empleado1.setTelefono(rs.getString(4));
-                empleado1.setVentas_realizadas(rs.getInt(5));
-                empleado1.setEstado(rs.getBoolean(6));
-                empleado1.setBono(rs.getFloat(7));
+                empleado1.setTelefono(rs.getString(5));
+                empleado1.setVentas_realizadas(rs.getInt(6));
+                empleado1.setEstado(rs.getBoolean(7));
+                empleado1.setBono(rs.getFloat(8));
                 empleado1.setExiste(true);
 
             }
@@ -244,7 +244,7 @@ public class ADEmpleado {
             resultado = cs.executeUpdate(); // Devuelve las filas afectadas
 
             if (resultado > 0) {
-                bono = cs.getFloat(2); // Se obtiene el parámetro de salida
+                bono = cs.getFloat(3); // Se obtiene el parámetro de salida
             }
 
         } catch (Exception e) {
