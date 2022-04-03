@@ -20,8 +20,8 @@ public class LNFactura {
         return _mensaje;
     }
 
-    public LNFactura(String _mensaje) {
-        this._mensaje = _mensaje;
+    public LNFactura() {
+        this._mensaje = "";
     }
     
     // <editor-fold desc="MÉTODOS" defaultstate="collapsed">    
