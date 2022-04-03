@@ -21,8 +21,8 @@ public class LNDetalle_Factura {
         return _mensaje;
     }
 
-    public LNDetalle_Factura(String _mensaje) {
-        this._mensaje = _mensaje;
+    public LNDetalle_Factura() {
+        this._mensaje = "";
     }
 
 // <editor-fold desc="MÉTODOS" defaultstate="collapsed">    
@@ -119,7 +119,7 @@ public class LNDetalle_Factura {
     //Método 7
     //Enviando y recibiendo parámetros obtenidos para el proceso almacenado
     public float Resumir_Ventas(int mes) throws Exception {
-        float resumen = 0;
+        float resumen ;
         ADDetalle_Factura adDetalle_Factura;
         
         try {

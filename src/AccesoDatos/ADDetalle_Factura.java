@@ -236,17 +236,15 @@ public class ADDetalle_Factura {
             CallableStatement cs = _conexion.prepareCall("{call SP_RESUMIR_VENTAS(?,?)}");
 
             //Se establecen los parámetros a enviar
-            cs.setInt(1, mes);
+            cs.setInt(1, (mes + 1));
             cs.setFloat(2, resumen);
 
             //Y los parámetros OUT del SP
-            cs.registerOutParameter(2, Types.VARCHAR);
+            cs.registerOutParameter(2, Types.FLOAT);
 
             resultado = cs.executeUpdate(); // Devuelve las filas afectadas
 
-            if (resultado > 0) {
-                resumen = cs.getFloat(2); // Se obtiene el parámetro de salida
-            }
+            resumen = cs.getFloat(2); // Se obtiene el parámetro de salida         
 
         } catch (Exception e) {
             throw e;

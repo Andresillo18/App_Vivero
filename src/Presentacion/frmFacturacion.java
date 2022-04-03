@@ -19,13 +19,12 @@ import javax.swing.table.DefaultTableModel;
  */
 public class frmFacturacion extends javax.swing.JInternalFrame {
 
-    
     DefaultTableModel modelo;
-    
+
     public frmFacturacion() {
         initComponents();
-        
-         try {
+
+        try {
             CargarDatos("");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
@@ -152,6 +151,11 @@ public class frmFacturacion extends javax.swing.JInternalFrame {
 
         jButton3.setFont(new java.awt.Font("sansserif", 0, 16)); // NOI18N
         jButton3.setText("Detallar Facturación");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -255,7 +259,7 @@ public class frmFacturacion extends javax.swing.JInternalFrame {
         tblFacturas.setModel(modelo); // La tabla se le establece el modelo y el modelo tiene los datos a ingresar
         modelo.addColumn("Código");
         modelo.addColumn("COD Empleado");
-        modelo.addColumn("COD Cliente");        
+        modelo.addColumn("COD Cliente");
     }
 // </editor-fold> 
 
@@ -276,7 +280,7 @@ public class frmFacturacion extends javax.swing.JInternalFrame {
                 fila[0] = fact.getCod_factura();
                 fila[1] = fact.getCod_empleado();
                 fila[2] = fact.getCod_cliente();
-                
+
                 modelo.addRow(fila);
             }
         } catch (Exception e) {
@@ -290,7 +294,7 @@ public class frmFacturacion extends javax.swing.JInternalFrame {
     private void Limpiar() {
         txtCod.setText("");
         txtCodEmpleado.setText("");
-        txtCodCliente.setText("");        
+        txtCodCliente.setText("");
     }
 // </editor-fold>
 
@@ -303,7 +307,7 @@ public class frmFacturacion extends javax.swing.JInternalFrame {
                 fact.setCod_factura(Integer.parseInt(txtCod.getText()));
             }
             fact.setCod_empleado(Integer.parseInt(txtCodEmpleado.getText()));
-            fact.setCod_cliente(Integer.parseInt(txtCodEmpleado.getText()));           
+            fact.setCod_cliente(Integer.parseInt(txtCodEmpleado.getText()));
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
@@ -311,7 +315,7 @@ public class frmFacturacion extends javax.swing.JInternalFrame {
         return fact;
     }
 // </editor-fold> 
-    
+
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
         frmEmpleados frm = new frmEmpleados();
@@ -329,8 +333,8 @@ public class frmFacturacion extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void btnMasEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMasEmpleadosActionPerformed
-        
-          frmTblClientes clientes = new frmTblClientes(null, true); // EL primero es si pertenece a alguien (parent) y el segundo es si un modal
+
+        frmTblClientes clientes = new frmTblClientes(null, true); // EL primero es si pertenece a alguien (parent) y el segundo es si un modal
         clientes.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
@@ -360,7 +364,7 @@ public class frmFacturacion extends javax.swing.JInternalFrame {
 
     private void btnMasClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMasClientesActionPerformed
 
-          frmTblEmpleados empleados = new frmTblEmpleados(null, true); // EL primero es si pertenece a alguien (parent) y el segundo es si un modal
+        frmTblEmpleados empleados = new frmTblEmpleados(null, true); // EL primero es si pertenece a alguien (parent) y el segundo es si un modal
         empleados.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
@@ -399,14 +403,14 @@ public class frmFacturacion extends javax.swing.JInternalFrame {
                 //A cuál fila se le dió click:
                 int fila = tblFacturas.rowAtPoint(evt.getPoint());
                 txtCod.setText(tblFacturas.getValueAt(fila, 0).toString());
-                txtCod.setText(tblFacturas.getValueAt(fila, 0).toString());  
+                txtCod.setText(tblFacturas.getValueAt(fila, 0).toString());
 
                 condicion = String.format("COD_FACTURA = %s", txtCod.getText());
                 fact = logica.ObtenerRegistro(condicion);
 
                 txtCod.setText(String.valueOf(fact.getCod_factura()));
                 txtCodEmpleado.setText(String.valueOf(fact.getCod_empleado()));
-                txtCodCliente.setText(String.valueOf(fact.getCod_cliente()));                
+                txtCodCliente.setText(String.valueOf(fact.getCod_cliente()));
 
             }
         } catch (Exception e) {
@@ -471,6 +475,14 @@ public class frmFacturacion extends javax.swing.JInternalFrame {
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         Limpiar();
     }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+
+        frmDetallesFacturas frm = new frmDetallesFacturas();
+
+        frm.toFront();
+        frm.setVisible(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

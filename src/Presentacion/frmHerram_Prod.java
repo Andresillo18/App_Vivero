@@ -399,10 +399,7 @@ public class frmHerram_Prod extends javax.swing.JInternalFrame {
             if (evt.getClickCount() == 2) {
                 //A cuál fila se le dió click:
                 int fila = tblHerra_Prods.rowAtPoint(evt.getPoint());
-                txtCod.setText(tblHerra_Prods.getValueAt(fila, 0).toString());
-                //                txtNombre.setText(tblClientes.getValueAt(fila, 1).toString());
-                //                txtTelefono.setText(tblClientes.getValueAt(fila, 2).toString());
-                //                txtDireccion.setText(tblClientes.getValueAt(fila, 3).toString());
+                txtCod.setText(tblHerra_Prods.getValueAt(fila, 0).toString());           
 
                 condicion = String.format("COD_HERRAMIENTA_PROD = %s", txtCod.getText());
                 HP = logica.ObtenerRegistro(condicion);

@@ -21,6 +21,10 @@ public class frmClientes extends javax.swing.JDialog {
 
         this.setLocationRelativeTo(null);
 
+        //Cuando cargue el formulario se establecen estos valores
+        RBActivo.doClick();
+        RBInactivo.setSelected(false);
+
         try {
             CargarDatos("");
         } catch (Exception e) {

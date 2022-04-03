@@ -20,6 +20,10 @@ public class frmEmpleados extends javax.swing.JDialog {
 
         this.setLocationRelativeTo(null);
 
+        //Cuando cargue el formulario se establecen estos valores
+        RBActivo.doClick();
+        RBInactivo.setSelected(false);
+        
         try {
             CargarDatos("");
         } catch (Exception e) {
@@ -504,12 +508,16 @@ public class frmEmpleados extends javax.swing.JDialog {
 
             if (!txtCod2.getText().equals("")) {
                 logica.ObtenerBono(Integer.parseInt(txtCod2.getText()), MCMes.getMonth());
-                JOptionPane.showMessageDialog(this, "Bono calculado");
 
                 String condicion = String.format("COD_EMPLEADO = %s", txtCod.getText());
                 empleado = logica.ObtenerRegistro(condicion);
                 txtBono.setValue(empleado.getBono());
-//                empleado = logica.ObtenerRegistro(condicion);
+                if (empleado.getBono() != 0) {
+                    JOptionPane.showMessageDialog(this, "Bono calculado");
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "Bono no calculado");
+                }
 
             } else {
                 JOptionPane.showMessageDialog(this, "Ingrese el código del empleado o dele doble click en la tabla");

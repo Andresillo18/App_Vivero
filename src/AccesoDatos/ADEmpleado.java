@@ -178,7 +178,7 @@ public class ADEmpleado {
                 list1.add(new Empleado(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getBoolean(7), rs.getFloat(8))); // Solo le envía un objeto
             }
         } catch (Exception e) {
-            throw e;
+                throw e;
         } finally {
             _conexion.close();
         }
@@ -235,7 +235,7 @@ public class ADEmpleado {
 
             //Se establecen los parámetros a enviar
             cs.setInt(1, cod_empleado);
-            cs.setInt(2, mes);
+            cs.setInt(2, (mes+1));
             cs.setFloat(3, bono);
 
             //Y los parámetros OUT del SP
